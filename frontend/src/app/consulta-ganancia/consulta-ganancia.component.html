@@ -1,0 +1,58 @@
+<div class="container mt-5">
+    <div class="row justify-content-center">
+      <div class="col-md-10">
+        <div class="card shadow">
+          <div class="card-header bg-primary text-white text-center">
+            <h4 class="fw-bold">Ganancias/Pérdidas</h4>
+          </div>
+          <div class="card-body">
+            <div *ngIf="errorMessage" class="alert alert-danger text-center">
+              {{ errorMessage }}
+            </div>
+            <div *ngIf="results.length > 0">
+              <table class="table table-bordered table-hover table-striped text-center">
+                <thead class="table-primary">
+                  <tr>
+                    <th>Símbolo</th>
+                    <th>Cantidad</th>
+                    <th>Precio de Compra</th>
+                    <th>Precio Actual</th>
+                    <th>Ganancia/Pérdida (%)</th>
+                    <th>Ganancia/Pérdida ($)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let result of results">
+                    <td>{{ result.symbol }}</td>
+                    <td>{{ result.quantity }}</td>
+                    <td>${{ result.purchasePrice.toFixed(2) }}</td>
+                    <td>${{ result.currentPrice.toFixed(2) }}</td>
+                    <td
+                      [ngClass]="{
+                        'text-success fw-bold': result.gainLossPercentage > 0,
+                        'text-danger fw-bold': result.gainLossPercentage < 0
+                      }"
+                    >
+                      {{ result.gainLossPercentage }}%
+                    </td>
+                    <td
+                      [ngClass]="{
+                        'text-success fw-bold': result.gainLossDollars > 0,
+                        'text-danger fw-bold': result.gainLossDollars < 0
+                      }"
+                    >
+                      ${{ result.gainLossDollars.toFixed(2) }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div *ngIf="results.length === 0 && !errorMessage" class="text-center text-secondary">
+              <p>No hay datos para mostrar.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
