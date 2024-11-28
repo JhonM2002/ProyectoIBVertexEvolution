@@ -73,4 +73,29 @@ const getProfitLoss = async (req, res) => {
     }
 };
 
-module.exports = { createPurchase, getProfitLoss };
+const compareStock = async (req, res) => {
+    try {
+      const { symbol } = req.params;
+  
+      if (!symbol) {
+        return res.status(400).json({ error: 'El símbolo es obligatorio.' });
+      }
+  
+      const apiKey = process.env.API_KEY;
+      const url = `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${symbol}&apikey=${apiKey}`;
+      const response = await axios.get(url);
+      const data = response.data['Global Quote'];
+  
+      if (!data || !data['05. price']) {
+        return res.status(404).json({ error: 'No se encontraron datos para el símbolo especificado.' });
+      }
+  
+      const currentPrice = parseFloat(data['05. price']);
+      res.status(200).json({ currentPrice });
+    } catch (error) {
+      console.error(`Error al comparar el precio de la acción: ${error.message}`);
+      res.status(500).json({ error: 'Error al comparar el precio de la acción.' });
+    }
+  };
+
+module.exports = { createPurchase, getProfitLoss,compareStock  };
