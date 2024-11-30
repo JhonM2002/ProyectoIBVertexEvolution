@@ -1,136 +1,80 @@
-<!-- <div class="container mt-5">
-    <div class="row justify-content-center">
-      <div class="col-md-10">
-        <div class="card shadow">
-          <div class="card-header bg-primary text-white text-center">
-            <h4 class="fw-bold">Ganancias/Pérdidas</h4>
-          </div>
-          <div class="card-body">
-            <div *ngIf="errorMessage" class="alert alert-danger text-center">
-              {{ errorMessage }}
-            </div>
-            <div *ngIf="results.length > 0">
-              <table class="table table-bordered table-hover table-striped text-center">
-                <thead class="table-primary">
-                  <tr>
-                    <th>Símbolo</th>
-                    <th>Cantidad</th>
-                    <th>Precio de Compra</th>
-                    <th>Precio Actual</th>
-                    <th>Ganancia/Pérdida (%)</th>
-                    <th>Ganancia/Pérdida ($)</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let result of results">
-                    <td>{{ result.symbol }}</td>
-                    <td>{{ result.quantity }}</td>
-                    <td>${{ result.purchasePrice.toFixed(2) }}</td>
-                    <td>${{ result.currentPrice.toFixed(2) }}</td>
-                    <td
-                      [ngClass]="{
-                        'text-success fw-bold': result.gainLossPercentage > 0,
-                        'text-danger fw-bold': result.gainLossPercentage < 0
-                      }"
-                    >
-                      {{ result.gainLossPercentage }}%
-                    </td>
-                    <td
-                      [ngClass]="{
-                        'text-success fw-bold': result.gainLossDollars > 0,
-                        'text-danger fw-bold': result.gainLossDollars < 0
-                      }"
-                    >
-                      ${{ result.gainLossDollars.toFixed(2) }}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div *ngIf="results.length === 0 && !errorMessage" class="text-center text-secondary">
-              <p>No hay datos para mostrar.</p>
-            </div>
-          </div>
+<div class="row justify-content-center">
+  <div class="col-md-10">
+    <div class="card shadow" style="background-color: #2c2c2c; border: 2px solid #00ff00;">
+      <div
+        class="card-header text-center"
+        style="background-color: #00ff00; color: #000; border-bottom: 2px solid #00ff00;"
+      >
+        <h4 class="fw-bold">Ganancias/Pérdidas</h4>
+      </div>
+      <div class="card-body">
+        <!-- Mensaje de error -->
+        <div *ngIf="errorMessage" class="alert alert-danger text-center">
+          {{ errorMessage }}
+        </div>
+
+        <!-- Tabla de resultados -->
+        <div *ngIf="results.length > 0">
+          <table
+            class="table text-center"
+            style="background-color: #000; color: #fff; border-collapse: collapse; width: 100%;"
+          >
+            <thead style="background-color: #000; color: #00ff00; border: 1px solid #00ff00;">
+              <tr>
+                <th style="background-color: #000;border: 1px solid #00ff00; padding: 10px;color: #00ff00">Símbolo</th>
+                <th style="background-color: #000;border: 1px solid #00ff00; padding: 10px;color: #00ff00">Cantidad</th>
+                <th style="background-color: #000;border: 1px solid #00ff00; padding: 10px;color: #00ff00">Precio de Compra</th>
+                <th style="background-color: #000;border: 1px solid #00ff00; padding: 10px;color: #00ff00">Acción</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                *ngFor="let result of results; let i = index"
+                [ngClass]="{ 'table-info': selectedRowIndex === i }"
+                style="background-color: #000; border: 1px solid #00ff00;"
+              >
+                <td style="background-color: #000; border: 1px solid #00ff00; color: #fff; padding: 10px;">{{ result.symbol }}</td>
+                <td style="background-color: #000; border: 1px solid #00ff00; color: #fff; padding: 10px;">{{ result.quantity }}</td>
+                <td style="background-color: #000; border: 1px solid #00ff00; color: #fff; padding: 10px;">${{ result.purchasePrice.toFixed(2) }}</td>
+                <td style="background-color: #000; border: 1px solid #00ff00; padding: 10px;">
+                  <button
+                    class="btn"
+                    (click)="compareStock(result, i)"
+                    style="background-color: #00ff00; color: #000; font-weight: bold;"
+                  >
+                    Comparar
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Resultados de la comparación -->
+        <div *ngIf="selectedStock">
+          <hr style="border-color: #00ff00;" />
+          <h5 class="text-center" style="color: #00ff00;">RESULTADOS DE COMPARACIÓN</h5>
+          <p style="color: #fff;"><strong>Símbolo:</strong> {{ selectedStock.symbol }}</p>
+          <p style="color: #fff;"><strong>Precio Actual:</strong> ${{ selectedStock.currentPrice.toFixed(2) }}</p>
+          <p
+            [ngStyle]="{ color: selectedStock.gainLossPercentage > 0 ? '#00ff00' : '#ff0000' }"
+          >
+            <strong>Ganancia/Pérdida (%):</strong>
+            {{ selectedStock.gainLossPercentage }}%
+          </p>
+          <p
+            [ngStyle]="{ color: selectedStock.gainLossDollars > 0 ? '#00ff00' : '#ff0000' }"
+          >
+            <strong>Ganancia/Pérdida ($):</strong>
+            ${{ selectedStock.gainLossDollars.toFixed(2) }}
+          </p>
+        </div>
+
+        <!-- Mensaje cuando no hay datos -->
+        <div *ngIf="results.length === 0 && !errorMessage" class="text-center text-muted">
+          <p style="color: #fff;">No hay datos para mostrar.</p>
         </div>
       </div>
     </div>
   </div>
-   -->
-
-
-
-   <div class="container mt-5">
-    <div class="row justify-content-center">
-      <div class="col-md-10">
-        <div class="card shadow">
-          <div class="card-header bg-primary text-white text-center">
-            <h4 class="fw-bold">Ganancias/Pérdidas</h4>
-          </div>
-          <div class="card-body">
-            <div *ngIf="errorMessage" class="alert alert-danger text-center">
-              {{ errorMessage }}
-            </div>
-            <div *ngIf="results.length > 0">
-              <table class="table table-bordered table-hover table-striped text-center">
-                <thead class="table-primary">
-                  <tr>
-                    <th>Símbolo</th>
-                    <th>Cantidad</th>
-                    <th>Precio de Compra</th>
-                    <th>Acción</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <!-- <tr *ngFor="let result of results"> -->
-                    <tr
-                      *ngFor="let result of results"
-                      [ngClass]="{ 'table-primary': result.symbol === selectedSymbol }"
-                    >
-                    <td>{{ result.symbol }}</td>
-                    <td>{{ result.quantity }}</td>
-                    <td>${{ result.purchasePrice.toFixed(2) }}</td>
-                    <td>
-                      <button
-                        class="btn btn-info btn-sm"
-                        (click)="compareStock(result)"
-                      >
-                        Comparar
-                      </button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div *ngIf="selectedStock">
-              <hr />
-              <h5 class="text-center">Resultados de la Comparación</h5>
-              <p><strong>Símbolo:</strong> {{ selectedStock.symbol }}</p>
-              <p><strong>Precio Actual:</strong> ${{ selectedStock.currentPrice.toFixed(2) }}</p>
-              <p
-                [ngClass]="{
-                  'text-success fw-bold': selectedStock.gainLossPercentage > 0,
-                  'text-danger fw-bold': selectedStock.gainLossPercentage < 0
-                }"
-              >
-                <strong>Ganancia/Pérdida (%):</strong>
-                {{ selectedStock.gainLossPercentage }}%
-              </p>
-              <p
-                [ngClass]="{
-                  'text-success fw-bold': selectedStock.gainLossDollars > 0,
-                  'text-danger fw-bold': selectedStock.gainLossDollars < 0
-                }"
-              >
-                <strong>Ganancia/Pérdida ($):</strong>
-                ${{ selectedStock.gainLossDollars.toFixed(2) }}
-              </p>
-            </div>
-            <div *ngIf="results.length === 0 && !errorMessage" class="text-center text-secondary">
-              <p>No hay datos para mostrar.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  
+</div>

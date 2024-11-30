@@ -19,6 +19,8 @@ export class PurchaseService {
   getProfitLoss(): Observable<any> {
     return this.http.get(`${this.apiUrl}/profit-loss`);
   }
+
+  // Comparar precio de una acción
   compareStockPrice(symbol: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/compare/${symbol}`);
   }

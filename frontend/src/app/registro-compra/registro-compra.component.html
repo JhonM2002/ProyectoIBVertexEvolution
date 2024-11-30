@@ -1,63 +1,69 @@
-<div class="container mt-5">
-    <div class="row justify-content-center">
-      <div class="col-md-6 col-lg-5">
-        <div class="card shadow">
-          <div class="card-header bg-primary text-white text-center">
-            <h4 class="fw-bold">Registrar Compra</h4>
-          </div>
-          <div class="card-body">
-            <form (ngSubmit)="onSubmit()">
-              <div class="form-group mb-3">
-                <label for="symbol" class="form-label fw-semibold">Símbolo de Acción:</label>
-                <input
-                  type="text"
-                  id="symbol"
-                  class="form-control"
-                  [(ngModel)]="purchase.symbol"
-                  name="symbol"
-                  required
-                />
-              </div>
-              <div class="form-group mb-3">
-                <label for="quantity" class="form-label fw-semibold">Cantidad:</label>
-                <input
-                  type="number"
-                  id="quantity"
-                  class="form-control"
-                  [(ngModel)]="purchase.quantity"
-                  name="quantity"
-                  required
-                />
-              </div>
-              <div class="form-group mb-3">
-                <label for="price" class="form-label fw-semibold">Precio de Compra:</label>
-                <input
-                  type="number"
-                  id="price"
-                  class="form-control"
-                  [(ngModel)]="purchase.purchasePrice"
-                  name="price"
-                  required
-                />
-              </div>
-              <div class="form-group mb-3">
-                <label for="date" class="form-label fw-semibold">Fecha de Compra:</label>
-                <input
-                  type="date"
-                  id="date"
-                  class="form-control"
-                  [(ngModel)]="purchase.purchaseDate"
-                  name="date"
-                  required
-                />
-              </div>
-              <div class="d-grid">
-                <button type="submit" class="btn btn-primary btn-lg">Registrar</button>
-              </div>
-            </form>
-          </div>
+<div class="container mt-5" style="background-color: #2c2c2c; padding: 20px; border-radius: 10px;">
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+      <div class="card shadow" style="background-color: #2c2c2c; border: 2px solid #00ff00;">
+        <div
+          class="card-header text-center"
+          style="background-color: #00ff00; color: #000; border-bottom: 2px solid #00ff00;"
+        >
+          <h4 class="fw-bold">Registrar Compra</h4>
+        </div>
+        <div class="card-body text-white">
+          <form (ngSubmit)="onSubmit()">
+            <div class="form-group mb-3">
+              <label for="symbol" class="form-label fw-semibold" style="color: #00ff00;">Símbolo de Acción:</label>
+              <input
+                type="text"
+                id="symbol"
+                class="form-control"
+                style="background-color: #2c2c2c; color: #fff; border: 1px solid #00ff00;"
+                [(ngModel)]="purchase.symbol"
+                name="symbol"
+                required
+              />
+            </div>
+            <div class="form-group mb-3">
+              <label for="quantity" class="form-label fw-semibold" style="color: #00ff00;">Cantidad:</label>
+              <input
+                type="number"
+                id="quantity"
+                class="form-control"
+                style="background-color: #2c2c2c; color: #fff; border: 1px solid #00ff00;"
+                [(ngModel)]="purchase.quantity"
+                name="quantity"
+                required
+              />
+            </div>
+            <div class="form-group mb-3">
+              <label for="price" class="form-label fw-semibold" style="color: #00ff00;">Precio de Compra:</label>
+              <input
+                type="number"
+                id="price"
+                class="form-control"
+                style="background-color: #2c2c2c; color: #fff; border: 1px solid #00ff00;"
+                [(ngModel)]="purchase.purchasePrice"
+                name="price"
+                required
+              />
+            </div>
+            <div class="form-group mb-3">
+              <label for="date" class="form-label fw-semibold" style="color: #00ff00;">Fecha de Compra:</label>
+              <input
+                type="date"
+                id="date"
+                class="form-control"
+                style="background-color: #2c2c2c; color: #fff; border: 1px solid #00ff00;"
+                [(ngModel)]="purchase.purchaseDate"
+                name="date"
+                required
+              />
+            </div>
+            <div class="d-grid">
+              <button type="submit" class="btn" style="background-color: #00ff00; color: #000; font-weight: bold;">Registrar</button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
   </div>
-  
+</div>

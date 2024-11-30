@@ -40,11 +40,12 @@ const getProfitLoss = async (req, res) => {
 
         // Consultar el precio actual para cada acción
         for (const purchase of purchases) {
-            const url = `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${purchase.symbol}&apikey=${apiKey}`;
-            const response = await axios.get(url);
-            const data = response.data['Global Quote'];
+            const url = `https://finnhub.io/api/v1/quote?symbol=${purchase.symbol}&token=${apiKey}`;
 
-            if (!data || !data['05. price']) {
+            const response = await axios.get(url);
+            const data = response.data;
+
+            if (!data || data.c === undefined) {
                 results.push({
                     symbol: purchase.symbol,
                     error: 'No se encontraron datos para esta acción en la API.',
@@ -52,7 +53,7 @@ const getProfitLoss = async (req, res) => {
                 continue;
             }
 
-            const currentPrice = parseFloat(data['05. price']);
+            const currentPrice = parseFloat(data.c);
             const gainLossPercentage = ((currentPrice - purchase.purchasePrice) / purchase.purchasePrice) * 100;
             const gainLossDollars = (currentPrice - purchase.purchasePrice) * purchase.quantity;
 
@@ -75,27 +76,27 @@ const getProfitLoss = async (req, res) => {
 
 const compareStock = async (req, res) => {
     try {
-      const { symbol } = req.params;
-  
-      if (!symbol) {
-        return res.status(400).json({ error: 'El símbolo es obligatorio.' });
-      }
-  
-      const apiKey = process.env.API_KEY;
-      const url = `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${symbol}&apikey=${apiKey}`;
-      const response = await axios.get(url);
-      const data = response.data['Global Quote'];
-  
-      if (!data || !data['05. price']) {
-        return res.status(404).json({ error: 'No se encontraron datos para el símbolo especificado.' });
-      }
-  
-      const currentPrice = parseFloat(data['05. price']);
-      res.status(200).json({ currentPrice });
-    } catch (error) {
-      console.error(`Error al comparar el precio de la acción: ${error.message}`);
-      res.status(500).json({ error: 'Error al comparar el precio de la acción.' });
-    }
-  };
+        const { symbol } = req.params;
 
-module.exports = { createPurchase, getProfitLoss,compareStock  };
+        if (!symbol) {
+            return res.status(400).json({ error: 'El símbolo es obligatorio.' });
+        }
+
+        const apiKey = process.env.API_KEY;
+        const url = `https://finnhub.io/api/v1/quote?symbol=${symbol}&token=${apiKey}`;
+        const response = await axios.get(url);
+        const data = response.data;
+
+        if (!data || data.c === undefined) {
+            return res.status(404).json({ error: 'No se encontraron datos para el símbolo especificado.' });
+        }
+
+        const currentPrice = parseFloat(data.c);
+        res.status(200).json({ currentPrice });
+    } catch (error) {
+        console.error(`Error al comparar el precio de la acción: ${error.message}`);
+        res.status(500).json({ error: 'Error al comparar el precio de la acción.' });
+    }
+};
+
+module.exports = { createPurchase, getProfitLoss, compareStock };
