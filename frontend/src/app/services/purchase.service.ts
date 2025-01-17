@@ -24,4 +24,8 @@ export class PurchaseService {
   compareStockPrice(symbol: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/compare/${symbol}`);
   }
+  getPurchases() {
+    return this.http.get<any[]>(this.apiUrl);
+  }
+  
 }

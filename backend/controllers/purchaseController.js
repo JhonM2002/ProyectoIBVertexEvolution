@@ -10,11 +10,12 @@ const createPurchase = async (req, res) => {
             return res.status(400).json({ error: 'Todos los campos son obligatorios.' });
         }
 
+        // Convertir la fecha a formato ISO antes de guardarla
         const newPurchase = new Purchase({
             symbol,
             quantity,
             purchasePrice,
-            purchaseDate,
+            purchaseDate: new Date(purchaseDate), // Convertir a objeto Date
         });
 
         const savedPurchase = await newPurchase.save();
@@ -41,13 +42,13 @@ const getProfitLoss = async (req, res) => {
         // Consultar el precio actual para cada acción
         for (const purchase of purchases) {
             const url = `https://finnhub.io/api/v1/quote?symbol=${purchase.symbol}&token=${apiKey}`;
-
             const response = await axios.get(url);
             const data = response.data;
 
             if (!data || data.c === undefined) {
                 results.push({
                     symbol: purchase.symbol,
+                    purchaseDate: purchase.purchaseDate,
                     error: 'No se encontraron datos para esta acción en la API.',
                 });
                 continue;
@@ -59,6 +60,7 @@ const getProfitLoss = async (req, res) => {
 
             results.push({
                 symbol: purchase.symbol,
+                purchaseDate: purchase.purchaseDate, // Formatear la fecha
                 quantity: purchase.quantity,
                 purchasePrice: purchase.purchasePrice,
                 currentPrice,
@@ -74,6 +76,7 @@ const getProfitLoss = async (req, res) => {
     }
 };
 
+// Comparar precio de una acción
 const compareStock = async (req, res) => {
     try {
         const { symbol } = req.params;
